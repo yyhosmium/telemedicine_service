@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>근처 병원 검색</title>
+</head>
+<body>
+    <h1>가장 가까운 병원</h1>
+    <p id="hospital"></p>
+<script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=APPKEY&libraries=services"></script>
+<script type="module">
+let placesSearchCB = function(result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+        document.getElementById('hospital').innerHTML=result[0].place_name;//오후 12:33 2022-05-24
+    }
+};
+let geocoder = new kakao.maps.services.Geocoder();
+geocoder.addressSearch('서울특별시 광운로 20', function(result, status) {
+    if (status === kakao.maps.services.Status.OK) {
+        let ps = new kakao.maps.services.Places();
+        const keyword = '내과';
+        ps.keywordSearch(keyword,placesSearchCB,{
+            location: new kakao.maps.LatLng(result[0]['address'].y, result[0]['address'].x),
+            sort: kakao.maps.services.SortBy.DISTANCE
+        });
+    }
+});
+</script>
+</body>
+</html>
